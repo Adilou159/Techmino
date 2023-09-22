@@ -38,6 +38,9 @@ return {
     maxspeed="!!!",
     speedup="~!~",
     missionFailed="-X_X-",
+    infHeightOn="∞↑ "..CHAR.icon.checkMark,
+    infHeightOff="∞↑ "..CHAR.icon.crossMark,
+    infHeightHint=CHAR.icon.checkMark.."/"..CHAR.icon.crossMark..": F₁",
 
     win=": )",
     lose=": (",
@@ -61,7 +64,7 @@ return {
 
     loadError_errorMode="'$1' ↑x!: no load mode '$2'",
     loadError_read="'$1' ↑x!: read failed",
-    loadError_noFile="'$1' ↑oading failed no file:",
+    loadError_noFile="'$1' loading failed no file:",
     loadError_other="'$1' ↑x!: $2",
     loadError_unknown="'$1' ↑x!: unknown reason",
 

@@ -33,13 +33,16 @@ return {
     tasUsing="[TAS]",
 
     stage="关卡 $1 完成",
-    great="Great！",
+    great="Great!",
     awesome="Awesome.",
-    almost="Almost！",
+    almost="Almost!",
     continue="Continue.",
     maxspeed="最高速度",
     speedup="速度加快",
     missionFailed="非任务消除",
+    infHeightOn="无限高度 开",
+    infHeightOff="无限高度 关",
+    infHeightHint="用功能键1切换",
 
     speedLV="速度等级",
     piece="块数",line="行数",atk="攻击",eff="效率",
@@ -324,6 +327,7 @@ return {
         "Miya",
         "Xiaoya",
         "Mono",
+        "Flore",
         "MrZ",
         "Trebor",
         "",
@@ -363,6 +367,7 @@ return {
         "huaji2369",
         "Lexitik",
         "Tourahi Anime",
+        "PopUpWaffles",
         "[All other test staff]",
         "…And You!",
     },
@@ -379,11 +384,10 @@ return {
         sha2 [Egor Skriptunoff]
     ]],
     support="支持作者",
-    dict={          -- Message from Sea: credit to User670 for helping me out this part.
+    dict={ -- Message from Sea: credit to User670 for helping me out this part.
         sizeChanged="已更改字号为$1",
         sizeReset="字号已重置",
-        helpText=
-[[
+        helpText=[[
 小Z词典操作说明
 
 鼠标/触摸屏：
@@ -403,8 +407,7 @@ return {
         按 $10 to 显示帮助
         按 $5 或 $6 滚动文本, 按 $11 加速
         按 $7 打开上一词条，按 $8 打开下一词条。按住 $11 加速
-        按住 $11 并按 $6 缩小字号，或 $5 增大字号
-]]
+        按住 $11 并按 $6 缩小字号，或 $5 增大字号]]
         -- 1-4: Up, Down, Left, Right
         -- 5-8: Up, Down, Left, Right but D-Pad
         -- 9-12: X, Y, A, B
@@ -884,8 +887,8 @@ return {
         ['round_h']=        {"回合制",       "困难",      "下棋模式"},
         ['round_l']=        {"回合制",       "疯狂",      "下棋模式"},
         ['round_u']=        {"回合制",       "极限",      "下棋模式"},
-        ['big_n']=          {"大方块",       "普通",     "模拟10*5场地的玩法(标准尺寸的一半)"},
-        ['big_h']=          {"大方块",       "困难",     "模拟10*5场地的玩法(标准尺寸的一半)"},
+        ['big_n']=          {"大方块",       "普通",     "模拟5×10场地(标准尺寸的一半)"},
+        ['big_h']=          {"大方块",       "困难",     "模拟5×10场地(标准尺寸的一半)"},
         ['master_n']=       {"大师",        "普通",      "20G初心者练习"},
         ['master_h']=       {"大师",        "困难",      "上级者20G挑战"},
         ['master_m']=       {"大师",        "大师",      "大师20G"},
@@ -937,6 +940,8 @@ return {
         ['tech_l_plus']=    {"科研",        "疯狂+",     "仅允许spin与PC"},
         ['tech_finesse']=   {"科研",        "极简",      "强制最简操作"},
         ['tech_finesse_f']= {"科研",        "极简+",     "禁止普通消除，强制最简操作"},
+        ['tech_finesse_lock']=  {"科研",    "极简限制",   "限制操作次数"},
+        ['tech_finesse_lock_f']={"科研",    "极简限制+",  "限制操作次数，禁止断B2B"},
         ['tsd_e']=          {"TSD挑战",     "简单",      "你能连续做几个TSD？"},
         ['tsd_h']=          {"TSD挑战",     "困难",      "你能连续做几个TSD？"},
         ['tsd_u']=          {"TSD挑战",     "极限",      "你能连续做几个TSD？"},
