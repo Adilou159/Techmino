@@ -50,14 +50,11 @@ BGM.setMaxSources(5)
 VOC.setDiversion(.62)
 
 WIDGET.setOnChange(function()
-    if SCN.cur~='net_game' and SCN.cur~='custom_field' then
-        local colorList=THEME.getThemeColor()
-        if colorList then
-            for _,W in next,SCN.scenes[SCN.cur].widgetList do
-                if W.color then
-                    W.color=colorList[math.random(#colorList)]
-                end
-            end
+    if SCN.cur=='net_game' or SCN.cur=='custom_field' then return end
+    local colorList=THEME.getThemeColor()
+    if colorList then
+        for _,W in next,SCN.scenes[SCN.cur].widgetList do
+            W.color=W.color and colorList[math.random(#colorList)]
         end
     end
 end)
@@ -191,7 +188,7 @@ Z.setOnFnKeys({
 Z.setOnGlobalKey('f11',function()
     if not MOBILE then
         SETTING.fullscreen=not SETTING.fullscreen
-        applySettings()
+        applySettings('fullscreen')
         saveSettings()
     end
 end)
@@ -376,30 +373,6 @@ then
     MES.new('error',"An error occured during loading, and some data was lost.")
 end
 
--- Initialize fields, sequence, missions, gameEnv for cutsom game
-local fieldData=loadFile('conf/customBoards','-string -canSkip')
-if fieldData then
-    fieldData=STRING.split(fieldData,"!")
-    for i=1,#fieldData do
-        DATA.pasteBoard(fieldData[i],i)
-    end
-else
-    FIELD[1]=DATA.newBoard()
-end
-local sequenceData=loadFile('conf/customSequence','-string -canSkip')
-if sequenceData then
-    DATA.pasteSequence(sequenceData)
-end
-local missionData=loadFile('conf/customMissions','-string -canSkip')
-if missionData then
-    DATA.pasteMission(missionData)
-end
-local customData=loadFile('conf/customEnv','-canSkip')
-if customData and customData['version']==VERSION.code then
-    TABLE.complete(customData,CUSTOMENV)
-end
-TABLE.complete(require"parts.customEnv0",CUSTOMENV)
-
 -- Update data
 do
     if type(STAT.version)~='number' then
@@ -464,6 +437,7 @@ do
     if not RANKS.sprint_10l then RANKS.sprint_10l=0 end
     if RANKS.master_l then RANKS.master_n,RANKS.master_l=RANKS.master_l end
     if RANKS.master_u then RANKS.master_h,RANKS.master_u=RANKS.master_u end
+    if RANKS.secret_grade then RANKS.construct_sg,RANKS.secret_grade=RANKS.secret_grade end
     for _,v in next,VK_ORG do v.color=nil end
     for name,rank in next,RANKS do
         if type(name)=='number' or type(rank)~='number' then

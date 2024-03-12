@@ -503,7 +503,14 @@ local function _drawNext(P,repMode)
         gc_setColor(1,1,1,.626)
         gc_draw(seqGenBanner[ENV.sequence],0,-11)
         gc_setColor(.97,.97,.97)
-        if ENV.holdMode=='swap' then gc_rectangle('fill',1,72*ENV.holdCount+4,50,4) end
+        if ENV.holdMode=='swap' then
+            gc_rectangle('fill',100,72*ENV.holdCount+2,-50,4)
+        elseif ENV.holdMode=='skip' then
+            gc_setColor(.97,.97,.97,.26)
+            gc_rectangle('fill',100,72*P.holdTime+2,-50,4)
+            gc_setColor(.97,.97,.97)
+            gc_rectangle('fill',100,72*ENV.holdCount+2,-50,4)
+        end
         gc_rectangle('line',0,0,100,h+8,5)
         gc_push('transform')
             gc_translate(50,40)
@@ -981,6 +988,21 @@ function draw.norm(P,repMode)
         for i=1,#ENV.mesDisp do
             gc_setColor(.97,.97,.97)
             ENV.mesDisp[i](P,repMode)
+        end
+
+        -- Torikan miss amount
+        if P.result=='torikan' then
+            local diff=P.stat.time-P.stat.torikanReq
+            if     diff>=60 then gc_setColor(COLOR.R)
+            elseif diff>=30 then gc_setColor(COLOR.F)
+            elseif diff>=15 then gc_setColor(COLOR.O)
+            elseif diff>=10 then gc_setColor(COLOR.Y)
+            elseif diff>=5  then gc_setColor(COLOR.flicker(COLOR.G,COLOR.L,.1))
+            else                 gc_setColor(COLOR.flicker(COLOR.G,COLOR.J,.05)) end
+            setFont(40)
+            -- self:_showText(STRING.time(self.stat.time).." / "..STRING.time(requiredTime),0,160,50,'beat',.5,.2)
+            GC.mStr(STRING.time(P.stat.time).." / "..STRING.time(P.stat.torikanReq),300,401)
+            GC.mStr("(+"..STRING.time_short(diff)..")",300,451)
         end
 
         if P.frameRun<180 then

@@ -151,6 +151,7 @@ local function _newEmptyPlayer(id,mini)
     P.nextQueue={}
     P.holdQueue={}
     P.holdTime=0
+    P.holdIXSFromNext=nil
     P.lastPiece={
         id=0,name=0,-- block id/name
 
@@ -199,8 +200,11 @@ local function _loadGameEnv(P)-- Load gameEnv
         end
     end
     if ENV.allowMod then
-        for _,M in next,GAME.mod do
-            M.func(P,M.list and M.list[M.sel])
+        for i=1,#GAME.mod do
+            if GAME.mod[i]>0 then
+                local M=MODOPT[i]
+                M.func(P,M.list and M.list[GAME.mod[i]])
+            end
         end
     end
 end
@@ -250,9 +254,7 @@ local hooks = {
     'hook_right',
     'hook_right_manual',
     'hook_right_auto',
-    'hook_rotLeft',
-    'hook_rotRight',
-    'hook_rot180',
+    'hook_rotate',
     'hook_drop',
     'hook_spawn',
     'hook_hold',
@@ -429,7 +431,7 @@ function PLY.newDemoPlayer(id)
         delay=6,
         node=100000,
     }
-    P:popNext()
+    P:spawn()
 end
 function PLY.newRemotePlayer(id,mini,p)
     local P=_newEmptyPlayer(id,mini)

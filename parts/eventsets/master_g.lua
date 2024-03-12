@@ -175,7 +175,7 @@ return {
             GC.rectangle('line',0,240,126,80,4)
             GC.setColor(.98,.98,.98,.4)
             GC.rectangle('fill',0+2,240+2,126-4,80-4,2) -- draw time box
-            
+
             setFont(45) -- Draw time text
             local t=(P.stat.frame-D.prevSectTime)/60
             local T=("%.1f"):format(60-t)
@@ -261,7 +261,7 @@ return {
             elseif s==5 then
                 if P.stat.frame>420*60 then
                     D.pt=500
-                    P:win('finish')
+                    P:torikanEnd(420)
                     return
                 else
                     BG.set('glow')

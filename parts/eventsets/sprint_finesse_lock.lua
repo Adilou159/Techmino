@@ -16,7 +16,10 @@ local function lockMovement(P)
     lockKey(P,{1,2})
 end
 local function lockRotation(P)
-    lockKey(P,{3,4,5})
+    lockKey(P,{3,4})
+end
+local function lockRotation180(P)
+    lockKey(P,{5})
 end
 local function unlock(P)
     if P.cur and P.cur.name==6 and not P.gameEnv.skipOCheck then -- don't unlock rotation if O piece & no O-spin
@@ -40,37 +43,38 @@ local function onMove(P)
     P.holdTime=0
     lockKey(P,{8})
 
-    -- return if overhang
-    if P:_roofCheck() then return end
-
-    P.modeData.moveCount=P.modeData.moveCount+1
-    if P.modeData.moveCount>=2 then lockMovement(P) end
+    if not P:_roofCheck() then
+        P.modeData.moveCount=P.modeData.moveCount+1
+        if P.modeData.moveCount>=2 then lockMovement(P) end
+    end
 end
 local function onAutoMove(P)
     if P:_roofCheck() then unlock(P) end
 end
-local function onRotate(P)
+local function onRotate(P,dir)
     if not P.cur then return end
 
     P.holdTime=0
     lockKey(P,{8})
 
-    -- return if overhang
-    if P:_roofCheck() then return end
-
-    P.modeData.rotations=P.modeData.rotations+1
-    if P.modeData.rotations>=2 then lockRotation(P) end
+    if not P:_roofCheck() then
+        P.modeData.rotations=P.modeData.rotations+(dir==2 and 2 or 1)
+        lockRotation180(P)
+        if P.modeData.rotations>=2 then
+            lockRotation(P)
+        end
+    end
 end
 
 return {
     arr=0,
     fineKill=true,
     mesDisp=function(P)
-        setFont(45)
-        GC.mStr(("%d"):format(P.stat.atk),63,190)
-        GC.mStr(("%.2f"):format(P.stat.atk/P.stat.row),63,310)
-        mText(TEXTOBJ.atk,63,243)
-        mText(TEXTOBJ.eff,63,363)
+        setFont(55)
+        local r=40-P.stat.row
+        if r<0 then r=0 end
+        GC.mStr(r,63,265)
+        PLY.draw.drawTargetLine(P,r)
     end,
     task=function(P)
         resetLock(P)
@@ -83,7 +87,7 @@ return {
     end,
     hook_drop=function(P)
         resetLock(P)
-        if P.stat.atk>=100 then
+        if P.stat.row>=40 then
             P:win('finish')
         end
     end,
@@ -91,6 +95,7 @@ return {
         if P.gameEnv.skipOCheck then return end
         if P.cur.name==6 then
             lockRotation(P)
+            lockRotation180(P)
         else
             resetLock(P)
         end
@@ -99,11 +104,12 @@ return {
         if P.gameEnv.skipOCheck then return end
         if P.cur.name==6 then
             lockRotation(P)
+            lockRotation180(P)
         else
             resetLock(P)
         end
     end,
     hook_left_manual=onMove, hook_right_manual=onMove,
     hook_left_auto=onAutoMove, hook_right_auto=onAutoMove,
-    hook_rotLeft=onRotate, hook_rotRight=onRotate, hook_rot180=onRotate,
+    hook_rotate=onRotate
 }
